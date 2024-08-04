@@ -1,0 +1,13 @@
+# Makefile.toml
+[tasks.build-dev]
+command = "cargo"
+args = ["build", "--profile", "dev"]
+
+[tasks.build-release]
+command = "cargo"
+args = ["build", "--release"]
+
+
+[tasks.run]
+command = "cargo"
+args = ["run"]
