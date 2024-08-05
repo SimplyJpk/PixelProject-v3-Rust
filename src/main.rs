@@ -5,8 +5,10 @@ use bevy::{
 };
 use components::util::fps_text::{setup as setup_fps_text, text_update_system};
 mod constant;
-use systems::physics::sand_step::sand_step;
+use resources::chunk_map::ChunkMap;
+use systems::physics::sand_step::{sand_step, update_textures};
 mod components;
+mod resources;
 mod systems;
 
 const DEFAULT_WINDOW_WIDTH: f32 = 1280.0;
@@ -31,6 +33,7 @@ fn main() {
     // Add FPS and diagnostics plugins
     .add_plugins(FrameTimeDiagnosticsPlugin::default())
     // Resources
+    .insert_resource(ChunkMap::default())
     .insert_resource(Time::<Fixed>::from_seconds(FIXED_UPDATE))
     // Startup
     .add_systems(Startup, systems::world::setup_world)
@@ -41,6 +44,8 @@ fn main() {
     // Update
     .add_systems(Update, text_update_system)
     .add_systems(Update, systems::camera_movement::camera_movement_system)
+    // Late Update
+    .add_systems(PostUpdate, update_textures)
     // Exit
     .add_systems(Update, systems::exit_on_esc::exit_on_esc_system)
     // Run

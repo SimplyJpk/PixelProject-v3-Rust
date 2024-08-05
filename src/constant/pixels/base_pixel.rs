@@ -43,13 +43,8 @@ pub trait Pixel {
         if Self::TYPE_COLOURS_COUNT == 1 {
             return Self::TYPE_COLOURS[0];
         }
-        let randomIndex = rand::thread_rng().gen_range(0..Self::TYPE_COLOURS_COUNT);
-        println!(
-            "Random index for pixel {} is {}",
-            Self::PIXEL_NAME,
-            randomIndex
-        );
-        return Self::TYPE_COLOURS[randomIndex as usize];
+        let random_index = rand::thread_rng().gen_range(0..Self::TYPE_COLOURS_COUNT);
+        return Self::TYPE_COLOURS[random_index as usize];
     }
 
     fn get_new_pixel() -> u32 {

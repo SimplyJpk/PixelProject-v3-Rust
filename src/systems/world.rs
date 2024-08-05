@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::components::world_chunk::WorldChunk;
 use bevy::prelude::*;
 use bevy::render::render_asset::RenderAssetUsages;
@@ -6,7 +8,7 @@ use bevy::render::texture::Image;
 use bytemuck::{cast_slice, Pod, Zeroable};
 
 use crate::constant::chunk::{SIZE_X, SIZE_Y, TOTAL_SIZE};
-use crate::constant::world::NUM_DIRECTIONS;
+use crate::constant::world::{Direction, NUM_DIRECTIONS};
 
 pub fn setup_world(
     mut commands: Commands,
@@ -21,7 +23,7 @@ pub fn setup_world(
         for y in 0..3 {
             let chunk = WorldChunk::new(IVec2::new(x, y), &mut textures);
 
-            commands
+            let entity = commands
                 .spawn(SpriteBundle {
                     texture: chunk.texture_handle.clone(),
                     transform: Transform::from_translation(Vec3::new(
@@ -31,7 +33,8 @@ pub fn setup_world(
                     )),
                     ..Default::default()
                 })
-                .insert(chunk);
+                .insert(chunk)
+                .id();
         }
     }
 }
