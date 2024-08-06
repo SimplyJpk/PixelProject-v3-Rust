@@ -5,5 +5,5 @@ use crate::components::world_chunk::WorldChunk;
 
 #[derive(Default, Resource)]
 pub struct ChunkMap {
-    pub chunks: HashMap<IVec2, Entity>,
+    pub chunks: HashMap<IVec2, WorldChunk>,
 }
