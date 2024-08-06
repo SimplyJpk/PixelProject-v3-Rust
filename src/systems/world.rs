@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+use std::sync::{Arc, RwLock};
 use crate::components::world_chunk::WorldChunk;
 use bevy::prelude::*;
 use bevy::render::render_asset::RenderAssetUsages;
@@ -9,11 +9,12 @@ use bytemuck::{cast_slice, Pod, Zeroable};
 
 use crate::constant::chunk::{SIZE_X, SIZE_Y, TOTAL_SIZE};
 use crate::constant::world::{Direction, NUM_DIRECTIONS};
+use crate::resources::chunk_map::ChunkMap;
 
 pub fn setup_world(
     mut commands: Commands,
     mut textures: ResMut<Assets<Image>>,
-    asset_server: Res<AssetServer>,
+    mut chunk_map: ResMut<ChunkMap>
 ) {
     // Calculate spacing based on texture size plus 1-2 pixels
     let spacing_x = SIZE_X as f32 + 2.0;
@@ -23,7 +24,7 @@ pub fn setup_world(
         for y in 0..3 {
             let chunk = WorldChunk::new(IVec2::new(x, y), &mut textures);
 
-            let entity = commands
+            commands
                 .spawn(SpriteBundle {
                     texture: chunk.texture_handle.clone(),
                     transform: Transform::from_translation(Vec3::new(
@@ -32,9 +33,9 @@ pub fn setup_world(
                         0.0,
                     )),
                     ..Default::default()
-                })
-                .insert(chunk)
-                .id();
+                });
+
+            chunk_map.chunks.insert(chunk.position, Arc::new(RwLock::new(chunk)));
         }
     }
 }
