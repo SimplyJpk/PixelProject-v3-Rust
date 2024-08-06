@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+use std::sync::{Arc, RwLock};
 use crate::components::world_chunk::WorldChunk;
 use bevy::prelude::*;
 use bevy::render::render_asset::RenderAssetUsages;
@@ -35,7 +35,7 @@ pub fn setup_world(
                     ..Default::default()
                 });
 
-            chunk_map.chunks.insert(chunk.position, chunk);
+            chunk_map.chunks.insert(chunk.position, Arc::new(RwLock::new(chunk)));
         }
     }
 }
